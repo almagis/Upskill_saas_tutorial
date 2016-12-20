@@ -1,5 +1,24 @@
 <div class="home-callout text-center container-fluid">
-    <h1>Welcome to DevMatch</h1>
-    <h3>A membership site where entrepreneurs can meet developers.</h3>
+  <h1>Welcome to DevMatch</h1>
+  <h3>A membership site where entrepreneurs can meet developers.</h3>
 </div>
 
+<div class="container home-sign-up-links">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="well text-center">
+          <h2>Basic Membership</h2><br>
+          <h4>Sign up for free and get basic access to the community</h4><br>
+          <%= link_to "Sign up with Basic", root_path, class: 'btn btn-primary btn-large' %>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="well text-center">
+          <h2>Pro Membership</h2><br>
+          <h4>Sign up for the premium account for only £10/month and get acces to the community and contact information!</h4>
+          <%= link_to "Sign up with Pro", root_path, class: 'btn btn-success btn-large' %>
+        </div>
+      </div>
+    </div>
+
+</div>

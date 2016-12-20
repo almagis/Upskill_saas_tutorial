@@ -1,0 +1,6 @@
+Memberships
+> user should see link for basic plan on home page
+> user should see link for pro plan on home page
+> the basic plan link should point to regular divise sign up page
+> the pro plan link should point to a custom sign up form
+> 
