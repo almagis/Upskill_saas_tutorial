@@ -10,6 +10,7 @@ $(document).on('turbolinks:load',function(){
   submitBtn.click(function(event){
     // prevent default submission behaviour
     event.preventDefault();
+    submitBtn.val('Processing...').prop('disabled',true);
     
     // collect the credit card fields
     var ccNum = $('#card_number').val(), 
@@ -17,17 +18,54 @@ $(document).on('turbolinks:load',function(){
         expMonth = $('#card_month').val(),
         expYear = $('#card_year').val();
     
-    // send the card info to stripe
-    Stripe.createToken({
-      number: ccNum,
-      cvc: cvcNum,
-      exp_month: expMonth,
-      exp_year: expYear
-    }, stripeResponseHandler);
+    var error = false;
+    
+    // Valdate card number.
+    if (!Stripe.card.validateCardNumber(ccNum)) {
+      error = true;
+      alert('The credit card number appears to be invalid')
+    };
+    
+    // Valdate cvc number.
+    if (!Stripe.card.validateCVC(cvcNum)) {
+      error = true;
+      alert('The security code appears to be invalid')
+    };
+    
+    // Valdate expiration date.
+    if (!Stripe.card.validateExpiry(expMonth, expYear)) {
+      error = true;
+      alert('The expiration date appears to be invalid')
+    };
+    
+    if (error) {
+      // if there are card errors, don't send to stripe.
+      submitBtn.prop('disabled', false).val('Sign Up');
+      
+    } else {
+      // send the card info to stripe
+      Stripe.createToken({
+        number: ccNum,
+        cvc: cvcNum,
+        exp_month: expMonth,
+        exp_year: expYear
+      }, stripeResponseHandler);
+      
+    };
+    
+    
+    return false;
   });
   
   // stripe will return card token
-  // inject card token as hidden field into form
-  // submit form to the rails app
-
+  function stripeResponseHandler(status, response) {
+    // Get token from response
+    var token = response.id;
+    
+    // Inject the card toek into a hidden field
+    theForm.append( $('<input type="hidden" name="user[stripe_card_token]">').val(token) );
+    
+    // submit form to the rails app
+    theForm.get(0).submit();
+  }
 });
